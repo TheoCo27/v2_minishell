@@ -6,7 +6,7 @@
 /*   By: tcohen <tcohen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 18:28:07 by tcohen            #+#    #+#             */
-/*   Updated: 2024/10/17 23:05:14 by tcohen           ###   ########.fr       */
+/*   Updated: 2024/10/18 18:17:19 by tcohen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ int	main(int ac, char **av, char **envp)
 	state->env = make_envp(envp, state);
 	state->gc = new_gc(state);
 	array = ft_malloc(sizeof(t_token **), &(state->gc), state);
-	set_sig();
 	if (!array)
 	{
 		destroy_gc(state->gc);
@@ -52,7 +51,9 @@ int	main(int ac, char **av, char **envp)
 	}
 	while (1)
 	{
+		set_sig();
 		line = readline("minishell> ");
+		set_exec_sig();
 		if (line == NULL)
 			break;
 		if (ft_strncmp(line, "stop", 4) == 0)

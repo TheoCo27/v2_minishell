@@ -6,11 +6,12 @@
 /*   By: tcohen <tcohen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 12:59:29 by tcohen            #+#    #+#             */
-/*   Updated: 2024/10/18 16:30:45 by tcohen           ###   ########.fr       */
+/*   Updated: 2024/10/18 18:19:03 by tcohen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+#include "../signal/ft_signal.h"
 
 static char	*ft_anti_fuck_heredoc(char *file_name)
 {
@@ -92,6 +93,7 @@ int ft_fill_heredoc(t_file_lst *file, t_info_exec *cmd, t_info_exec **lst)
 	(void)lst;
 	while(1)
 	{
+		set_heredoc_sig();
 		in_heredoc(1);
 		line = readline("heredoc> ");
 		if (!line)
@@ -110,6 +112,7 @@ int ft_fill_heredoc(t_file_lst *file, t_info_exec *cmd, t_info_exec **lst)
 		g_free(line);
 	}
 	in_heredoc(-1);
+	set_exec_sig();
 	return (0);
 }
 

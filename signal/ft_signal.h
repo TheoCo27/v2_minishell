@@ -6,7 +6,7 @@
 /*   By: tcohen <tcohen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 18:12:57 by tcohen            #+#    #+#             */
-/*   Updated: 2024/10/17 23:05:59 by tcohen           ###   ########.fr       */
+/*   Updated: 2024/10/18 18:12:57 by tcohen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,3 +16,5 @@
 
 void	check_if_sig(void);
 void	set_sig(void);
+void	set_heredoc_sig(void);
+void	set_exec_sig(void);
