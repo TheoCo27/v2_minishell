@@ -6,7 +6,7 @@
 /*   By: tcohen <tcohen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 14:48:33 by tcohen            #+#    #+#             */
-/*   Updated: 2024/10/13 19:52:48 by tcohen           ###   ########.fr       */
+/*   Updated: 2024/10/16 13:57:28 by tcohen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ char	**ft_split(const char *s, char c)
 		{
 			tab[w_count] = make_word(s, c, i);
 			if (!tab[w_count])
-				return (ft_free_all(tab));
+				return (ft_free_all(tab), NULL);
 			w_count++;
 		}
 		i++;

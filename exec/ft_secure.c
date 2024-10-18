@@ -6,7 +6,7 @@
 /*   By: tcohen <tcohen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 11:48:02 by tcohen            #+#    #+#             */
-/*   Updated: 2024/10/13 20:41:23 by tcohen           ###   ########.fr       */
+/*   Updated: 2024/10/16 16:02:23 by tcohen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,11 @@ int	ft_open(char *file_name, char mode, t_info_exec *info, t_info_exec **lst)
 	if (fd < 0)
 	{
 		perror(file_name);
-		ft_close_pipe(info->pipe_fd);
-		ft_close_remaining_pipes(info, lst);
-		ft_pipelst_clear(lst);
-		ft_destroy_garbage();
+		if (info->pid == 0 && ft_pipelst_size(*lst) > 1)
+			ft_close_remaining_pipes(info, lst);
+		if (info->pid != 0)
+			return (-1);
+		garbage_destroy();
 		exit(errno);
 	}
 	return (fd);
@@ -53,11 +54,9 @@ int	ft_execve(t_info_exec *cmd, t_info_exec **lst)
 	if (execve(cmd->path, cmd->arg, cmd->env) == -1)
 	{
 		perror(cmd->path);
-		ft_clean_info(cmd);
 		if (ft_pipelst_size(*lst) > 1)
 			ft_close_remaining_pipes(cmd, lst);
-		ft_pipelst_clear(lst);
-		ft_destroy_garbage();
+		garbage_destroy();
 		exit (errno);
 	}
 	return (-1);
@@ -76,28 +75,20 @@ int	ft_pipe(int fd[2], t_info_exec	**lst, t_info_exec *cmd)
 				break;
 			ft_close_pipe(temp->pipe_fd);
 		}
-		ft_pipelst_clear(lst);
 		perror("pipe failed");
-		ft_destroy_garbage();
-		exit(errno);
+		return (-1);
 	}
 	return (0);
 }
 
 int ft_fork(t_info_exec *cmd, t_info_exec **lst)
 {
-	int status;
-
-	status = 0;
+	(void)lst;
 	cmd->pid = fork();
 	if (cmd->pid < 0)
 	{
 		ft_putendl_fd("Error fork", 2);
-		status = ft_wait_pids(*lst, status);
-		ft_close_allpipes(*lst);
-		ft_pipelst_clear(lst);
-		ft_destroy_garbage();
-		exit(status);
+		return (-1);
 	}
-	return (status);
+	return (0);
 }

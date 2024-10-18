@@ -6,7 +6,7 @@
 /*   By: tcohen <tcohen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 15:15:20 by tcohen            #+#    #+#             */
-/*   Updated: 2024/10/13 15:41:37 by tcohen           ###   ########.fr       */
+/*   Updated: 2024/10/16 17:15:55 by tcohen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static void	g_free_first(t_garbage *node)
 {
 	free(node->content);
 	node->next->prev = NULL;
-	get_garbage(node->next);
+	get_garbage(node->next, 0);
 	node->content = NULL;
 	free(node);
 	node = NULL;
@@ -48,7 +48,7 @@ void	g_free(void *ptr)
 	t_garbage	*temp;
 	t_garbage	*last;
 
-	lst = get_garbage(NULL);
+	lst = get_garbage(NULL, 0);
 	if (!lst || !ptr)
 		return ;
 	temp = lst;

@@ -6,7 +6,7 @@
 /*   By: tcohen <tcohen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 16:44:50 by tcohen            #+#    #+#             */
-/*   Updated: 2024/10/13 20:39:09 by tcohen           ###   ########.fr       */
+/*   Updated: 2024/10/18 16:16:57 by tcohen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,41 +51,37 @@
 // }
 
 // GOOOD FUNCTIION HERE
-
-void ft_destroy_garbage(void)
-{
-	t_garbage *lst;
-
-	lst = get_garbage(NULL);
-	if (!lst)
-		return ;
-	garbage_lstclear(&lst);
-}
-int	ft_make_exec(t_token ***cmd_array, char **env)
+int	ft_make_exec(t_token ***cmd_array, t_state *state)
 {
 	t_info_exec	*lst;
 	int			status;
 
 	status = 0;
 	lst = NULL;
-	lst = ft_make_pipelst(cmd_array);
+	lst = ft_make_pipelst(cmd_array, state);
 	if (!lst)
-		return (-1);
-	ft_name_heredocs(&lst);
-	ft_fill_all_heredocs(&lst);
-	ft_pipelst_printcmd(&lst);
-	if (!lst)
-		return (1);
+		return (1); // leaks all good till here
+	if (ft_name_heredocs(&lst) == -1)
+		return (garbage_destroy(), 1); // leaks all good till here
+	if (ft_fill_all_heredocs(&lst) == -1)
+		return (garbage_destroy(), errno);
+	//ft_pipelst_printcmd(&lst); // leaks all good till here
 	if (ft_pipelst_size(lst) == 1)
-        return (status = ft_only_child(lst, env, &lst), status);//gestion leaks a part a faire
-	ft_set_pipes(&lst);
-	ft_while_fork(&lst, env);
+        return (status = ft_only_child(lst, state->env, &lst), status);//leaks all good till here
+	if (ft_set_pipes(&lst) == -1)
+		return (garbage_destroy(), errno); //leaks all good till here
+	if (ft_while_fork(&lst, state->env) == -1)
+	{
+		status = ft_wait_pids(lst, status);
+		ft_close_allpipes(lst);
+		garbage_destroy();
+		return (status);
+	}
 	if (ft_pipelst_size(lst) > 1)
     	ft_close_allpipes(lst);
     status = ft_wait_pids(lst, status);
 	ft_destroy_heredocs(&lst);
-    ft_pipelst_clear(&lst);
-	ft_destroy_garbage();
+    garbage_destroy();
 	return (status);
 }
 

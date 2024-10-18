@@ -6,7 +6,7 @@
 /*   By: tcohen <tcohen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 19:09:56 by tcohen            #+#    #+#             */
-/*   Updated: 2024/10/13 20:45:24 by tcohen           ###   ########.fr       */
+/*   Updated: 2024/10/16 16:29:27 by tcohen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ t_info_exec	*ft_pipelst_new(void)
 // {
 // 	t_info_exec	*new;
 
-// 	new = (t_info_exec *)g_malloc(sizeof(t_info_exec));
+// 	new = (t_info_exec *)malloc(sizeof(t_info_exec));
 // 	if (!new)
 // 		return (NULL);
 // 	ft_bzero(new, sizeof(t_info_exec));
@@ -95,7 +95,7 @@ void	ft_pipelst_clear(t_info_exec **lst)
 	while (*lst)
 	{
 		temp = (*lst)->next;
-		//ici g_free le contenue du node;
+		//ici free le contenue du node;
 		if ((*lst)->cmd)
 			g_free((*lst)->cmd);
 		if ((*lst)->arg)
@@ -148,7 +148,7 @@ void	ft_pipelst_reverse_printcmd(t_info_exec	**lst)
 }
 
 
-t_info_exec	*ft_make_pipelst(t_token ***array)
+t_info_exec	*ft_make_pipelst(t_token ***array, t_state *state)
 {
 	size_t		i;
 	t_info_exec	*lst;
@@ -160,7 +160,8 @@ t_info_exec	*ft_make_pipelst(t_token ***array)
 	{
 		new = ft_token_to_exec(array[i]);
 		if (!new)
-			return (ft_pipelst_clear(&lst), NULL);
+			return (garbage_destroy(), NULL);
+		new->state = state;
 		ft_pipelst_addback(&lst, new);
 		i++;
 	}

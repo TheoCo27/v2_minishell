@@ -6,7 +6,7 @@
 /*   By: tcohen <tcohen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 19:02:09 by tcohen            #+#    #+#             */
-/*   Updated: 2024/10/13 13:50:00 by tcohen           ###   ########.fr       */
+/*   Updated: 2024/10/17 23:04:44 by tcohen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 # define DQUOTE 34
 # define NOQUOTE_SEP 0
 
+extern int g_signal;
 
 typedef struct s_state
 {
@@ -47,6 +48,6 @@ typedef struct s_token
 	int		is_special;
 }			t_token;
 
-int	ft_make_exec(t_token ***cmd_array, char **env);
-
+int		ft_make_exec(t_token ***cmd_array, t_state *state);
+int		launch_if_builtin(char **array, t_state *s);
 #endif

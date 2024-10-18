@@ -1,28 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_free_all.c                                      :+:      :+:    :+:   */
+/*   ft_signal.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tcohen <tcohen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/19 20:03:41 by tcohen            #+#    #+#             */
-/*   Updated: 2024/10/16 13:47:14 by tcohen           ###   ########.fr       */
+/*   Created: 2024/10/17 18:12:57 by tcohen            #+#    #+#             */
+/*   Updated: 2024/10/17 23:05:59 by tcohen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../minishell.h"
+#include "../exec/pipex.h"
+#include <signal.h>
 
-void	ft_free_all(char **tab)
-{
-	size_t	i;
-
-	i = 0;
-	if (!tab)
-		return ;
-	while (tab[i])
-	{
-		g_free(tab[i]);
-		i++;
-	}
-	g_free(tab);
-}
+void	check_if_sig(void);
+void	set_sig(void);

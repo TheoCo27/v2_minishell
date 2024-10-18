@@ -6,7 +6,7 @@
 /*   By: vispinos <vispinos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 14:41:57 by vispinos          #+#    #+#             */
-/*   Updated: 2024/10/10 11:41:00 by vispinos         ###   ########.fr       */
+/*   Updated: 2024/10/16 18:25:04 by vispinos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,11 +85,7 @@ int	ft_export(char **vars, t_state *s)
 	{
 		if (unvalid_regex(vars[i]))
 		{
-			ft_putstr_fd("bash: export: '", 2);
-			ft_putstr_fd(vars[i], 2);
-			ft_putendl_fd("': not a valid identifier", 2);
-			code = 1;
-			i++;
+			put_export_unvalid_regex(vars[i], &code, &i);
 			continue ;
 		}
 		var_name = pft_substr(vars[i], 0, get_var_len(vars[i], 0), s);

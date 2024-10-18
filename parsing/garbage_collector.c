@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   garbage_collector.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcohen <tcohen@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vispinos <vispinos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 13:45:34 by vispinos          #+#    #+#             */
-/*   Updated: 2024/10/10 19:29:39 by tcohen           ###   ########.fr       */
+/*   Updated: 2024/10/16 18:29:30 by vispinos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,22 +48,22 @@ void	*ft_malloc(size_t size, t_list **gc, t_state *s)
 	return (lst_elem->content);
 }
 
-void ft_free(void *ptr, t_list **gc)
+void	ft_free(void *ptr, t_list **gc)
 {
-	t_list *temp;
+	t_list	*temp;
 
 	if (!ptr)
 		return ;
 	temp = *gc;
-	while(temp)
+	while (temp)
 	{
 		if (temp->content == ptr)
 		{
 			free(ptr);
 			ptr = NULL;
-			return;
+			return ;
 		}
-		temp = temp->next;	
+		temp = temp->next;
 	}
 }
 

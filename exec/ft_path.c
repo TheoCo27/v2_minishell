@@ -6,7 +6,7 @@
 /*   By: tcohen <tcohen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 14:28:28 by tcohen            #+#    #+#             */
-/*   Updated: 2024/10/13 20:44:28 by tcohen           ###   ########.fr       */
+/*   Updated: 2024/10/16 15:22:38 by tcohen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,16 +108,16 @@ int	ft_path(char **env, t_info_exec *info)
 	if (ifpath == 1)
 		return (0);
 	if (ifpath == 2)
-		return (ft_putstr_fd("g_malloc failed\n", 2), 1);
+		return (ft_putstr_fd("Malloc failed\n", 2), 1);
 	getenv_path = ft_getenv_path(env, info);
 	if (getenv_path == 1)
-		return (ft_putstr_fd("g_malloc failed\n", 2), 1);
+		return (ft_putstr_fd("Malloc failed\n", 2), 1);
 	if (getenv_path == 2)
 		return (ft_execve_stuff(info), 0);
 	find_cmd = ft_find_cmd(info);
 	if (find_cmd == 0)
 		return (0);
 	if (find_cmd == 1)
-		return (ft_putstr_fd("g_malloc failed\n", 2), 1);
+		return (ft_putstr_fd("Malloc failed\n", 2), 1);
 	return (ft_path_bis(find_cmd, info));
 }

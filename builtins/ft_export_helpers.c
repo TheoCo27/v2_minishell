@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export_helpers.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcohen <tcohen@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vispinos <vispinos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 14:52:59 by vispinos          #+#    #+#             */
-/*   Updated: 2024/10/10 20:04:42 by tcohen           ###   ########.fr       */
+/*   Updated: 2024/10/16 18:23:55 by vispinos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,4 +68,13 @@ char	**make_char_s_arr_from_str(char *str, t_state *s)
 	array[0] = str;
 	array[1] = NULL;
 	return (array);
+}
+
+void	put_export_unvalid_regex(char *str, int *code, int *i)
+{
+	ft_putstr_fd("bash: export: '", 2);
+	ft_putstr_fd(str, 2);
+	ft_putendl_fd("': not a valid identifier", 2);
+	*code = 1;
+	*i += 1;
 }

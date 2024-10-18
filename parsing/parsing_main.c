@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_main.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vispinos <vispinos@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tcohen <tcohen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 17:31:49 by vispinos          #+#    #+#             */
-/*   Updated: 2024/10/06 05:17:44 by vispinos         ###   ########.fr       */
+/*   Updated: 2024/10/16 18:36:04 by tcohen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,11 @@ static void	init_array_maker(t_am *am)
 	am->sq = 0;
 	am->dq = 0;
 	am->last_token_spe = -1;
+	am->error = 0;
 }
 
-t_token	**make_token_array(char *line, t_token **token_array, t_state *s)
+/* t_a : token_array */
+t_token	**make_token_array(char *line, t_token **t_a, t_state *s)
 {
 	t_am	am;
 
@@ -41,88 +43,19 @@ t_token	**make_token_array(char *line, t_token **token_array, t_state *s)
 		{
 			while (line[am.i] && ft_is_space(line[am.i]))
 				am.i++;
-			if (line[am.i] == '<' && line[am.i + 1] == '<')
-			{
-				if (am.last_token_spe == 1
-					&& token_array[array_len(token_array) - 1]-> type != PIPE)
-					return (s->exit_code = 2, ft_stx_err("<<"), NULL);
-				token_array = mt_append(HEREDOC, NULL, token_array, s);
-				am.i += 2;
-				am.last_token_spe = 1;
-			}
-			else if (line[am.i] == '<')
-			{
-				if (am.last_token_spe == 1
-					&& token_array[array_len(token_array) - 1]-> type != PIPE)
-					return (s->exit_code = 2, ft_stx_err("<"), NULL);
-				token_array = mt_append(INFILE, NULL, token_array, s);
-				am.i += 1;
-				am.last_token_spe = 1;
-			}
-			else if (line[am.i] == '>' && line[am.i + 1] == '>')
-			{
-				if (am.last_token_spe == 1
-					&& token_array[array_len(token_array) - 1]-> type != PIPE)
-					return (s->exit_code = 2, ft_stx_err(">>"), NULL);
-				token_array = mt_append(OUTFILE_APPEND, NULL, token_array, s);
-				am.i += 2;
-				am.last_token_spe = 1;
-			}
-			else if (line[am.i] == '>')
-			{
-				if (am.last_token_spe == 1
-					&& token_array[array_len(token_array) - 1]-> type != PIPE)
-					return (s->exit_code = 2, ft_stx_err(">"), NULL);
-				token_array = mt_append(OUTFILE_TRUNCATE, NULL, token_array, s);
-				am.i += 1;
-				am.last_token_spe = 1;
-			}
-			else if (line[am.i] == '|')
-			{
-				if (am.last_token_spe == 1 || am.last_token_spe == -1)
-					return (s->exit_code = 2, ft_stx_err("|"), NULL);
-				token_array = mt_append(PIPE, NULL, token_array, s);
-				am.i += 1;
-				am.last_token_spe = 1;
-			}
-			else
-			{
-				am.word_len = find_word_len(line, am.i);
-				am.msh.i = am.i;
-				am.msh.sep = NOQUOTE_SEP;
-				token_array = ms_append(line, token_array, s, am.msh);
-				am.i += am.word_len;
-				am.last_token_spe = 0;
-			}
+			if (!h(&am, &line, &t_a, s) && !i(&am, &line, &t_a, s)
+				&& !oa(&am, &line, &t_a, s) && !ot(&am, &line, &t_a, s)
+				&& !p(&am, &line, &t_a, s))
+				nqstr(&am, &line, &t_a, s);
 		}
-		else if (am.sq == 1)
-		{
-			am.next_quote = get_next_quote(line, (am.i + 1), SQUOTE);
-			if (am.next_quote == -1)
-				return (ft_stx_err("'"), s->exit_code = 2, NULL);
-			am.msh.i = am.i;
-			am.msh.sep = SQUOTE;
-			token_array = ms_append(line, token_array, s, am.msh);
-			am.i = am.next_quote + 1;
-			am.sq = 0;
-			am.last_token_spe = 0;
-		}
-		else if (am.dq == 1)
-		{
-			am.next_quote = get_next_quote(line, (am.i + 1), DQUOTE);
-			if (am.next_quote == -1)
-				return (ft_stx_err("\""), s->exit_code = 2, NULL);
-			am.msh.i = am.i;
-			am.msh.sep = DQUOTE;
-			token_array = ms_append(line, token_array, s, am.msh);
-			am.i = am.next_quote + 1;
-			am.dq = 0;
-			am.last_token_spe = 0;
-		}
+		else if (!sqstr(&am, &line, &t_a, s))
+			dqstr(&am, &line, &t_a, s);
+		if (am.error == 1)
+			return (NULL);
 		while (line[am.i] && ft_is_space(line[am.i]))
 			am.i++;
 	}
-	return (token_array);
+	return (t_a);
 }
 
 t_token	***parseline(t_state *s, char *line)

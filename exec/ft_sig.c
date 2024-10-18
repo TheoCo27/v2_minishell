@@ -1,27 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_set.c                                           :+:      :+:    :+:   */
+/*   ft_sig.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tcohen <tcohen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/25 15:04:24 by tcohen            #+#    #+#             */
-/*   Updated: 2024/10/16 16:27:54 by tcohen           ###   ########.fr       */
+/*   Created: 2024/10/17 22:17:42 by tcohen            #+#    #+#             */
+/*   Updated: 2024/10/17 22:53:06 by tcohen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int	ft_execve_stuff(t_info_exec *info)
+int in_heredoc(int update)
 {
-	info->path = ft_strdup(info->cmd);
-	if (!info->path)
-		return (ft_free_all(info->arg), 1);
-	info->cmd = ft_strdup(info->cmd);
-	if (!info->cmd)
-		return (g_free(info->path), ft_free_all(info->arg), 1);
-	info->t_path = ft_split(info->cmd, ' ');
-	if (!info->t_path)
-		return (g_free(info->cmd), g_free(info->path), ft_free_all(info->arg), 1);
-	return (0);
+	static int in_heredoc;
+
+	if (update == 1)
+		in_heredoc = 1;
+	if (update == -1)
+		in_heredoc = 0;
+	return (in_heredoc);
 }

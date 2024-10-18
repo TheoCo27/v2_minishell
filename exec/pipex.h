@@ -6,7 +6,7 @@
 /*   By: tcohen <tcohen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 16:51:13 by tcohen            #+#    #+#             */
-/*   Updated: 2024/10/13 20:39:50 by tcohen           ###   ########.fr       */
+/*   Updated: 2024/10/18 16:11:05 by tcohen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ typedef struct s_file
 	char			type;
 	char			*name;
 	char			*delimiter;
+	char			**heredoc_content;
 	struct	s_file	*next;
 }					t_file_lst;
 
@@ -44,17 +45,19 @@ typedef struct s_info_exec
 	char	**t_path;
 	char	**arg;
 	int		pipe_fd[2];
-	int		in_out_fd;
 	int		in_fd;
 	int		out_fd;
 	t_file_lst	*file_lst;
 	char	**env;
 	size_t	index;
 	int		pid;
+	t_state *state;
 	struct s_info_exec *next;
 	struct s_info_exec *prev;
 }			t_info_exec;
 
+//ft_sig.c
+int in_heredoc(int update);
 // ft_file_lst.c
 t_file_lst	*ft_newfile(char *content, char type);
 t_file_lst	*ft_filelast(t_file_lst *lst);
@@ -66,14 +69,12 @@ void    ft_print_filelst(t_file_lst **lst);
 int	ft_name_heredocs(t_info_exec **lst);
 t_heredoc *ft_make_heredoc(t_info_exec *cmd, t_info_exec **lst);
 int ft_destroy_heredocs(t_info_exec **lst);
-int ft_fill_heredoc(char *limiter, char *filename, t_info_exec *cmd, t_info_exec **lst);
+int ft_fill_heredoc(t_file_lst *file, t_info_exec *cmd, t_info_exec **lst);
 int ft_fill_all_heredocs(t_info_exec **lst);
 
 //ft_make_exec.c
 //int	ft_make_exec(int argc, char **argv, char **env);
-int	ft_make_exec(t_token ***cmd_array, char **env);
-t_info_exec	*ft_make_pipelst(t_token ***array);
-void ft_destroy_garbage(void);
+int	ft_make_exec(t_token ***cmd_array, t_state *state);
 
 //ft_child.c
 // int		ft_cmd_arg(char *cmd, t_info_exec *info, t_info_exec **lst);
@@ -112,14 +113,14 @@ void	ft_pipelst_addback(t_info_exec **lst, t_info_exec *new);
 void	ft_pipelst_clear(t_info_exec **lst);
 void	ft_pipelst_printcmd(t_info_exec	**lst);
 void	ft_pipelst_reverse_printcmd(t_info_exec	**lst);
-t_info_exec	*ft_make_pipelst(t_token ***cmd_array);
+t_info_exec	*ft_make_pipelst(t_token ***array, t_state *state);
 size_t	ft_pipelst_size(t_info_exec *lst);
 void	ft_pipelst_clear_node(t_info_exec *node);
 //ft_exec_one.c
 int	ft_only_child(t_info_exec *cmd, char **env, t_info_exec **lst);
 //ft_while_cmd.c
 int     ft_close_allpipes(t_info_exec  *lst);
-void    ft_set_pipes(t_info_exec **lst);
+int    ft_set_pipes(t_info_exec **lst);
 int		ft_while_fork(t_info_exec **lst_cmd, char **env);
 int		ft_close_remaining_pipes(t_info_exec *cmd, t_info_exec **lst);
 //ft_token_to_exec.h

@@ -6,7 +6,7 @@
 /*   By: tcohen <tcohen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 22:09:25 by theog             #+#    #+#             */
-/*   Updated: 2024/10/13 20:33:51 by tcohen           ###   ########.fr       */
+/*   Updated: 2024/10/18 16:04:42 by tcohen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,17 @@ t_file_lst	*ft_newfile(char *content, char type)
     new->type = type;
 	new->next = NULL;
     if (type != 'h')
-	    new->name = content;
+	{
+		new->name = content;
+		new->heredoc_content = NULL;
+	}
     if (type == 'h')
     {
         new->name = NULL;
         new->delimiter = content;
+		new->heredoc_content = ft_make_tabstr();
+		if (!new->heredoc_content)
+			return (g_free(new), NULL);
     }
 	return (new);
 }
@@ -68,7 +74,7 @@ void	ft_filelstclear(t_file_lst **lst)
 	while (*lst)
 	{
 		temp = (*lst)->next;
-        //g_free ce que y a g_free
+        //free ce que y a free
 		g_free(*lst);
 		*lst = temp;
 	}

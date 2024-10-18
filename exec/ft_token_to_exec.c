@@ -6,7 +6,7 @@
 /*   By: tcohen <tcohen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 04:41:59 by theog             #+#    #+#             */
-/*   Updated: 2024/10/13 13:18:04 by tcohen           ###   ########.fr       */
+/*   Updated: 2024/10/16 14:05:36 by tcohen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,21 +33,21 @@ t_info_exec *ft_convert_redir_token(t_info_exec *cmd, t_token **array, int *i)
     {
 		new = ft_newfile(array[(*i) + 1]->content, 'r');
 		if (!new)
-			return (ft_pipelst_clear_node(cmd), NULL);
+			return (NULL);
         ft_fileadd_back(&cmd->file_lst, new);
     }
     if (array[*i]->type == OUTFILE_APPEND && array[(*i) + 1]->type == ARG)
     {
 		new = ft_newfile(array[(*i) + 1]->content, 'a');
 		if (!new)
-			return (ft_pipelst_clear_node(cmd), NULL);
+			return (NULL);
         ft_fileadd_back(&cmd->file_lst, new);
     }
     if (array[*i]->type == OUTFILE_TRUNCATE && array[(*i) + 1]->type == ARG)
     {
 		new = ft_newfile(array[(*i) + 1]->content, 'w');
 		if (!new)
-			return (ft_pipelst_clear_node(cmd), NULL);
+			return (NULL);
         ft_fileadd_back(&cmd->file_lst, new);
     }
     return (cmd);
@@ -57,10 +57,10 @@ static t_info_exec	*ft_token_to_cmd(t_token *token, t_info_exec *cmd)
 {
 	cmd->cmd = ft_strdup(token->content);
 	if (!cmd->cmd)
-		return (ft_pipelst_clear_node(cmd), NULL);
+		return (NULL);
 	cmd->arg = ft_tabstr_addback(token->content, cmd->arg);
 	if (!cmd->arg)
-		return (ft_pipelst_clear_node(cmd), NULL);
+		return (NULL);
 	return (cmd);
 }
 
@@ -72,7 +72,7 @@ static t_info_exec *ft_convert_heredoc_token(t_info_exec *cmd, t_token **array, 
     {
 		new = ft_newfile(array[(*i) + 1]->content, 'h');
 		if (!new)
-			return (ft_pipelst_clear_node(cmd), NULL);
+			return (NULL);
         ft_fileadd_back(&cmd->file_lst, new);
     }
 	return (cmd);
@@ -98,7 +98,7 @@ t_info_exec *ft_token_to_exec(t_token **array)
 		{
 			cmd->arg = ft_tabstr_addback(array[i]->content, cmd->arg);
 			if (!cmd->arg)
-				return (ft_pipelst_clear_node(cmd), NULL);
+				return (NULL);
 		}
 		i++;
 	}

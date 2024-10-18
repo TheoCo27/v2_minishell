@@ -6,7 +6,7 @@
 /*   By: tcohen <tcohen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 21:15:24 by tcohen            #+#    #+#             */
-/*   Updated: 2024/10/13 20:25:12 by tcohen           ###   ########.fr       */
+/*   Updated: 2024/10/16 13:47:34 by tcohen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ int		ft_charcmp(char c, char to_cmp);
 char	*ft_str_free_s1_join(char *s1_to_g_free, char *s2);
 int		ft_str_setonly(char *str, char *set);
 size_t	ft_wdcount(const char *str, char c);
-void	*ft_free_all(char **tab);
+void	ft_free_all(char **tab);
 // ft_tab_str.c
 char	**ft_make_tabstr(void);
 char **ft_temptab_totab(char **tab_dest, char **tab_src);

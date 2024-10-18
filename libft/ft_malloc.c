@@ -6,7 +6,7 @@
 /*   By: tcohen <tcohen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 14:15:14 by tcohen            #+#    #+#             */
-/*   Updated: 2024/10/13 16:23:47 by tcohen           ###   ########.fr       */
+/*   Updated: 2024/10/16 17:15:25 by tcohen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_garbage *set_garbage(void)
 	return (head);
 }
 
-t_garbage *get_garbage(t_garbage *update)
+t_garbage *get_garbage(t_garbage *update, int reset)
 {
 	static t_garbage *head;
 
@@ -34,6 +34,8 @@ t_garbage *get_garbage(t_garbage *update)
 	}
 	if (update != NULL)
 		head = update;
+	if (reset == 1)
+		head = NULL;
 	return (head);
 }
 
@@ -42,7 +44,7 @@ void	*g_malloc(size_t size)
 	t_garbage	*new;
 	t_garbage	*lst;
 
-	lst = get_garbage(NULL);
+	lst = get_garbage(NULL, 0);
 	if (!lst)
 		return (NULL);
 	new = garbage_lstnew();
@@ -53,4 +55,15 @@ void	*g_malloc(size_t size)
 	if (!new->content)
 		return (garbage_lstclear(&lst), NULL);
 	return (new->content);
+}
+
+void	garbage_destroy(void)
+{
+	t_garbage *lst;
+
+	lst = get_garbage(NULL, 0);
+	if (!lst)
+		return;
+	garbage_lstclear(&lst);
+	get_garbage(NULL, 1);
 }

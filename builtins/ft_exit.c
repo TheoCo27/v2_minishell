@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcohen <tcohen@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vispinos <vispinos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 14:03:49 by vispinos          #+#    #+#             */
-/*   Updated: 2024/10/10 20:03:51 by tcohen           ###   ########.fr       */
+/*   Updated: 2024/10/16 18:26:01 by vispinos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ static int	isnum(char *str)
 		i++;
 	if (str[i] == '+' || str[i] == '-')
 		i++;
+	if (!str[i])
+		return (0);
 	while (ft_isdigit(str[i]))
 		i++;
 	if (str[i])

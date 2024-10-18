@@ -6,28 +6,11 @@
 /*   By: tcohen <tcohen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 12:59:29 by tcohen            #+#    #+#             */
-/*   Updated: 2024/10/13 20:42:42 by tcohen           ###   ########.fr       */
+/*   Updated: 2024/10/18 16:30:45 by tcohen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
-// int	ft_open(char *file_name, char mode, t_info_exec *info)
-// {
-// 	int	fd;
-
-// 	if (mode == 'h')
-// 		fd = open(file_name, O_RDWR | O_CREAT | O_TRUNC, 0777);
-// 	if (fd < 0)
-// 	{
-// 		perror(file_name);
-// 		ft_close_pipe(info->pipe_fd);
-// 		//ft_close_remaining_pipes(cmd, lst);
-// 		//ft_pipelst_clear(lst);
-// 		exit(errno);
-// 	}
-// 	return (fd);
-// }
 
 static char	*ft_anti_fuck_heredoc(char *file_name)
 {
@@ -58,6 +41,8 @@ int	ft_name_heredocs(t_info_exec **lst)
 			if (file->type == 'h')
 			{
 				name = ft_str_free_s1_join(name, "1");
+				if (!name)
+					return (-1);
 				name = ft_anti_fuck_heredoc(name);
 				if (!name)
 					return (-1);
@@ -85,7 +70,10 @@ int ft_fill_all_heredocs(t_info_exec **lst)
 		while(file)
 		{
 			if (file->type == 'h')
-				ft_fill_heredoc(file->delimiter, file->name, cmd, lst);
+			{
+				if (ft_fill_heredoc(file, cmd, lst) == -1)
+					return (-1);
+			}
 			file = file->next;
 		}
 		cmd = cmd->next;
@@ -93,57 +81,35 @@ int ft_fill_all_heredocs(t_info_exec **lst)
 	return (0);
 }
 
-// int ft_fill_heredoc(char *limiter, char *filename, t_info_exec *cmd, t_info_exec **lst)
-// {
-// 	char	*line;
-// 	size_t	limiter_len;
-// 	int		fd;
-	
-// 	fd = ft_open(filename, 'h', cmd, lst);
-// 	line = NULL;
-// 	limiter_len = ft_strlen(limiter);
-// 	// if (ft_checkif_heredoc() == 1)
-// 	// 	ft_fill_heredoc(limiter, filename, cmd, lst);
-// 	while(1)
-// 	{
-// 		ft_putstr_fd("heredoc> ", 1);
-// 		line = get_next_line(0);
-// 		if (!line)
-// 			break;
-// 		if (ft_strncmp(line, limiter, limiter_len) == 0 && line[limiter_len] == '\n')
-// 		{
-// 			g_free(line);
-// 			break;
-// 		}
-// 		ft_putstr_fd(line, fd);
-// 		g_free(line);
-// 	}
-// 	close (fd);
-// 	return (0);
-// }
-int ft_fill_heredoc(char *limiter, char *filename, t_info_exec *cmd, t_info_exec **lst)
+int ft_fill_heredoc(t_file_lst *file, t_info_exec *cmd, t_info_exec **lst)
 {
 	char	*line;
 	size_t	limiter_len;
-	int		fd;
-	
-	fd = ft_open(filename, 'h', cmd, lst);
+
 	line = NULL;
-	limiter_len = ft_strlen(limiter);
+	limiter_len = ft_strlen(file->delimiter);
+	(void)cmd;
+	(void)lst;
 	while(1)
 	{
+		in_heredoc(1);
 		line = readline("heredoc> ");
 		if (!line)
+		{
+			printf("warning: here-document delimited by end-of-file (wanted '%s')\n", file->delimiter);
 			break;
-		if (ft_strncmp(line, limiter, limiter_len) == 0)
+		}
+		if (ft_strncmp(line, file->delimiter, limiter_len) == 0)
 		{
 			g_free(line);
 			break;
 		}
-		ft_putendl_fd(line, fd);
+		file->heredoc_content = ft_tabstr_addback(line, file->heredoc_content);
+		if (!file->heredoc_content)
+			return (g_free(line), -1);
 		g_free(line);
 	}
-	close (fd);
+	in_heredoc(-1);
 	return (0);
 }
 
@@ -185,6 +151,35 @@ t_heredoc *ft_make_heredoc(t_info_exec *cmd, t_info_exec **lst)
 	return (h);
 }
 
+// int ft_fill_heredoc(char *limiter, char *filename, t_info_exec *cmd, t_info_exec **lst)
+// {
+// 	char	*line;
+// 	size_t	limiter_len;
+// 	int		fd;
+	
+// 	fd = ft_open(filename, 'h', cmd, lst);
+// 	line = NULL;
+// 	limiter_len = ft_strlen(limiter);
+// 	// if (ft_checkif_heredoc() == 1)
+// 	// 	ft_fill_heredoc(limiter, filename, cmd, lst);
+// 	while(1)
+// 	{
+// 		ft_putstr_fd("heredoc> ", 1);
+// 		line = get_next_line(0);
+// 		if (!line)
+// 			break;
+// 		if (ft_strncmp(line, limiter, limiter_len) == 0 && line[limiter_len] == '\n')
+// 		{
+// 			free(line);
+// 			break;
+// 		}
+// 		ft_putstr_fd(line, fd);
+// 		free(line);
+// 	}
+// 	close (fd);
+// 	return (0);
+// }
+
 // int main(int argc, char **argv)
 // {
 // 	t_heredoc *h;
@@ -212,7 +207,7 @@ t_heredoc *ft_make_heredoc(t_info_exec *cmd, t_info_exec **lst)
 // 		if (!line)
 // 			break;
 // 		ft_putstr_fd(line, 1);
-// 		g_free(line);
+// 		free(line);
 // 	}
 // 	ft_destroy_heredoc(h);
 // 	return (0);
