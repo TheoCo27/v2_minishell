@@ -6,7 +6,7 @@
 /*   By: tcohen <tcohen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 16:44:50 by tcohen            #+#    #+#             */
-/*   Updated: 2024/10/18 16:16:57 by tcohen           ###   ########.fr       */
+/*   Updated: 2024/10/21 20:56:12 by tcohen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,12 +64,12 @@ int	ft_make_exec(t_token ***cmd_array, t_state *state)
 	if (ft_name_heredocs(&lst) == -1)
 		return (garbage_destroy(), 1); // leaks all good till here
 	if (ft_fill_all_heredocs(&lst) == -1)
-		return (garbage_destroy(), errno);
+		return (garbage_destroy(), 1);
 	//ft_pipelst_printcmd(&lst); // leaks all good till here
 	if (ft_pipelst_size(lst) == 1)
         return (status = ft_only_child(lst, state->env, &lst), status);//leaks all good till here
 	if (ft_set_pipes(&lst) == -1)
-		return (garbage_destroy(), errno); //leaks all good till here
+		return (garbage_destroy(), 1); //leaks all good till here
 	if (ft_while_fork(&lst, state->env) == -1)
 	{
 		status = ft_wait_pids(lst, status);

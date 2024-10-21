@@ -6,11 +6,12 @@
 /*   By: tcohen <tcohen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 11:48:02 by tcohen            #+#    #+#             */
-/*   Updated: 2024/10/16 16:02:23 by tcohen           ###   ########.fr       */
+/*   Updated: 2024/10/21 20:43:56 by tcohen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+#include "../signal/ft_signal.h"
 
 int	ft_open(char *file_name, char mode, t_info_exec *info, t_info_exec **lst)
 {
@@ -51,7 +52,7 @@ int	ft_dup2(int old_fd, int new_fd)
 
 int	ft_execve(t_info_exec *cmd, t_info_exec **lst)
 {
-	if (execve(cmd->path, cmd->arg, cmd->env) == -1)
+	if (execve(cmd->path, cmd->arg, cmd->state->env) == -1)
 	{
 		perror(cmd->path);
 		if (ft_pipelst_size(*lst) > 1)
@@ -90,5 +91,7 @@ int ft_fork(t_info_exec *cmd, t_info_exec **lst)
 		ft_putendl_fd("Error fork", 2);
 		return (-1);
 	}
+	if (cmd->pid == 0)
+		set_exec_sig();
 	return (0);
 }

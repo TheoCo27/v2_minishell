@@ -6,7 +6,7 @@
 /*   By: tcohen <tcohen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 19:02:09 by tcohen            #+#    #+#             */
-/*   Updated: 2024/10/17 23:04:44 by tcohen           ###   ########.fr       */
+/*   Updated: 2024/10/21 20:30:09 by tcohen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ typedef struct s_state
 {
 	char	**env;
 	int		exit_code;
+	int		test;
 	t_list	*gc;
 }			
 	t_state;

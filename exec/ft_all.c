@@ -6,7 +6,7 @@
 /*   By: tcohen <tcohen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 15:27:54 by tcohen            #+#    #+#             */
-/*   Updated: 2024/10/16 16:27:57 by tcohen           ###   ########.fr       */
+/*   Updated: 2024/10/21 20:32:01 by tcohen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,26 @@ void	ft_close_all(int pipe_fd[2], int in_out_fd)
 	close(in_out_fd);
 }
 
+int	exit_status(int status, t_info_exec *lst)
+{
+	if (WIFEXITED(status))
+	{
+		lst->state->exit_code = WEXITSTATUS(status);
+		return (WEXITSTATUS(status));
+	}
+	else if (WIFSTOPPED(status))
+	{
+		lst->state->exit_code = 128 + WSTOPSIG(status);
+		return (128 + WSTOPSIG(status));
+	}
+	else if (WIFSIGNALED(status))
+	{
+		lst->state->exit_code = 128 + WTERMSIG(status);
+		return (128 + WTERMSIG(status));
+	}
+	return (-1);
+}
+
 int	ft_wait_pids(t_info_exec *lst, int status)
 {
 	t_info_exec	*temp;
@@ -33,9 +53,13 @@ int	ft_wait_pids(t_info_exec *lst, int status)
 	{
 		if (temp->pid != -1)
 			waitpid(temp->pid, &status, 0);
+		if (WIFSTOPPED(status))
+			lst->state->test = 128 + WSTOPSIG(status);
+		else if (WIFSIGNALED(status))
+			lst->state->test = 128 + WTERMSIG(status);
 		temp = temp->next;
 	}
-	return (WIFEXITED(status) && WEXITSTATUS(status));
+	return (exit_status(status, lst));
 }
 
 int	ft_clean_info(t_info_exec *cmd)

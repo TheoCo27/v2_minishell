@@ -6,7 +6,7 @@
 /*   By: tcohen <tcohen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 12:59:29 by tcohen            #+#    #+#             */
-/*   Updated: 2024/10/18 18:19:03 by tcohen           ###   ########.fr       */
+/*   Updated: 2024/10/21 21:17:28 by tcohen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,8 @@ int ft_fill_all_heredocs(t_info_exec **lst)
 	return (0);
 }
 
+void	set_parent_exec_sig(void);
+
 int ft_fill_heredoc(t_file_lst *file, t_info_exec *cmd, t_info_exec **lst)
 {
 	char	*line;
@@ -91,13 +93,16 @@ int ft_fill_heredoc(t_file_lst *file, t_info_exec *cmd, t_info_exec **lst)
 	limiter_len = ft_strlen(file->delimiter);
 	(void)cmd;
 	(void)lst;
+	// set_heredoc_sig();
+	set_heredoc_sig();
+	in_heredoc(1);
 	while(1)
 	{
-		set_heredoc_sig();
-		in_heredoc(1);
 		line = readline("heredoc> ");
-		if (!line)
+		if (!line || g_signal != 0)
 		{
+			if (g_signal != 0)
+				return (in_heredoc(-1), -1);
 			printf("warning: here-document delimited by end-of-file (wanted '%s')\n", file->delimiter);
 			break;
 		}
@@ -112,7 +117,7 @@ int ft_fill_heredoc(t_file_lst *file, t_info_exec *cmd, t_info_exec **lst)
 		g_free(line);
 	}
 	in_heredoc(-1);
-	set_exec_sig();
+	set_parent_exec_sig();
 	return (0);
 }
 
