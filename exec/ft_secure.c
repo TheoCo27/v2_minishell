@@ -6,7 +6,7 @@
 /*   By: tcohen <tcohen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 11:48:02 by tcohen            #+#    #+#             */
-/*   Updated: 2024/10/22 22:42:40 by tcohen           ###   ########.fr       */
+/*   Updated: 2024/10/22 23:19:29 by tcohen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,13 @@ int	ft_execve(t_info_exec *cmd, t_info_exec **lst)
 {
 	if (execve(cmd->path, cmd->arg, cmd->state->env) == -1)
 	{
-		perror(cmd->path);
+		if (errno != ENOENT)
+			perror(cmd->path);
+		if (errno == ENOENT)
+		{
+			ft_putstr_fd(cmd->path, 2);
+			ft_putstr_fd(": Command not found\n", 2);
+		}
 		if (ft_pipelst_size(*lst) > 1)
 			ft_close_remaining_pipes(cmd, lst);
 		garbage_destroy();

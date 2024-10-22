@@ -6,7 +6,7 @@
 /*   By: tcohen <tcohen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 16:02:22 by tcohen            #+#    #+#             */
-/*   Updated: 2024/10/17 18:21:42 by tcohen           ###   ########.fr       */
+/*   Updated: 2024/10/22 23:43:54 by tcohen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,15 +81,18 @@ int	ft_exec_child(t_info_exec *cmd, t_info_exec **lst, char **env, int status)
     ft_close_wrongpipes(cmd, lst);
     if (status != 0)
 	    if (ft_dup2(cmd->prev->pipe_fd[0], 0) == -1)
-		    return (ft_close_remaining_pipes(cmd, lst), garbage_destroy(), errno);
+		    return (ft_close_remaining_pipes(cmd, lst), garbage_destroy(), 1);
     if (status != 1)
 	    if (ft_dup2(cmd->pipe_fd[1], 1) == -1)
-		    return (ft_close_remaining_pipes(cmd, lst), garbage_destroy(), errno);
+		    return (ft_close_remaining_pipes(cmd, lst), garbage_destroy(), 1);
 	ft_redir_all(cmd, lst);
 	if (launch_if_builtin(cmd->arg, cmd->state) == 1)
-			return(cmd->state->exit_code); // update status et et check if fail clean_exit
+	{
+		status = cmd->state->exit_code;
+		return(garbage_destroy(), status);
+	}
 	if (ft_path(env, cmd) == 1)
-		return (ft_close_remaining_pipes(cmd, lst), garbage_destroy(), errno);
+		return (ft_close_remaining_pipes(cmd, lst), garbage_destroy(), 1);
 	ft_execve(cmd, lst);
 	return (0);
 }
