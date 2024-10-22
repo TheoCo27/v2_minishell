@@ -6,7 +6,7 @@
 /*   By: tcohen <tcohen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 18:28:07 by tcohen            #+#    #+#             */
-/*   Updated: 2024/10/22 22:47:40 by tcohen           ###   ########.fr       */
+/*   Updated: 2024/10/22 23:49:07 by tcohen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,8 @@ int	minishell(t_state *state, t_token ***array)
 
 	line = readline("minishell> ");
 	// set_exec_sig();
-	if (line == NULL)
-		return (1);
+	if (!line)
+		return (EXIT_FAILURE);
 	add_history(line);
 	array = parseline(state, line);
 	if (array)
