@@ -6,7 +6,7 @@
 /*   By: tcohen <tcohen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 18:28:07 by tcohen            #+#    #+#             */
-/*   Updated: 2024/10/22 23:49:07 by tcohen           ###   ########.fr       */
+/*   Updated: 2024/10/23 00:03:02 by tcohen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,10 @@ int	minishell(t_state *state, t_token ***array)
 	line = readline("minishell> ");
 	// set_exec_sig();
 	if (!line)
-		return (EXIT_FAILURE);
+	{
+		destroy_gc(state->gc);
+		exit(0);
+	}
 	add_history(line);
 	array = parseline(state, line);
 	if (array)
@@ -76,9 +79,8 @@ int	main(int ac, char **av, char **envp)
 	t_token	***array;
 	t_state	state;
 
-	// state = malloc(sizeof(t_state));
-	// if (!state)
-	// 	return (0);
+	(void)ac;
+	(void)av;
 	get_state(&state);
 	state.exit_code = 0;
 	state.test = 0;
@@ -99,8 +101,7 @@ int	main(int ac, char **av, char **envp)
 		shallow_clear_gc(state.gc, state.env);
 	}
 	destroy_gc(state.gc);
-	if (av || ac)
-		return (0);
+	return (0);
 }
 
 // pour compiler : cc -W... *.c libft/*.c -lreadline
