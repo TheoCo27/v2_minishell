@@ -6,7 +6,7 @@
 /*   By: tcohen <tcohen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 16:30:55 by tcohen            #+#    #+#             */
-/*   Updated: 2024/10/18 16:29:20 by tcohen           ###   ########.fr       */
+/*   Updated: 2024/10/22 22:50:31 by tcohen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static int ft_heredoc(t_info_exec *cmd, t_file_lst *file, t_info_exec **lst)
 			if (ft_pipelst_size(*lst) > 1)
 				ft_close_remaining_pipes(cmd, lst);
 			garbage_destroy();
-			exit(errno);
+			exit(1);
 		}
 	}
 	return (0);
@@ -56,7 +56,7 @@ static int ft_redir_one(t_info_exec *cmd, t_file_lst *file, t_info_exec **lst)
 			if (ft_pipelst_size(*lst) > 1)
 				ft_close_remaining_pipes(cmd, lst);
 			garbage_destroy();
-			exit(errno);
+			exit(1);
 		}
 	}
 	if (file->type == 'r')
@@ -67,7 +67,7 @@ static int ft_redir_one(t_info_exec *cmd, t_file_lst *file, t_info_exec **lst)
 			if (ft_pipelst_size(*lst) > 1)
 				ft_close_remaining_pipes(cmd, lst);
 			garbage_destroy();
-			exit(errno);
+			exit(1);
 		}
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: tcohen <tcohen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 16:51:13 by tcohen            #+#    #+#             */
-/*   Updated: 2024/10/18 16:11:05 by tcohen           ###   ########.fr       */
+/*   Updated: 2024/10/22 22:35:19 by tcohen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ typedef struct s_info_exec
 	struct s_info_exec *next;
 	struct s_info_exec *prev;
 }			t_info_exec;
-
+// exit_code.
+int	errno_to_exit_code(int errno_value);
 //ft_sig.c
 int in_heredoc(int update);
 // ft_file_lst.c
