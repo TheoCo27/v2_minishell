@@ -6,7 +6,7 @@
 /*   By: tcohen <tcohen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 18:28:07 by tcohen            #+#    #+#             */
-/*   Updated: 2024/10/24 18:05:40 by tcohen           ###   ########.fr       */
+/*   Updated: 2024/10/24 19:36:07 by tcohen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int	minishell(t_state *state, t_token ***array)
 		if (ft_make_exec(array, state) == EXIT_FAILURE)
 			return (0);
 	}
-	// shallow_clear_gc(state.gc, state.env);
+	// shallow_clear2(&(state.gc), state.env);
 	if (state->exit_code == 128 + SIGQUIT)
 		printf("Quit (core dumped)\n");
 	else if (state->exit_code == 128 + SIGINT)
@@ -97,7 +97,7 @@ int	main(int ac, char **av, char **envp)
 		set_sig();
 		if (minishell(&state, array) == EXIT_FAILURE)
 			break;
-		shallow_clear_gc(state.gc, state.env);
+		shallow_clear2(&(state.gc), state.env);
 	}
 	destroy_gc(state.gc);
 	return (0);

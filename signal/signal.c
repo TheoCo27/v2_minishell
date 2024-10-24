@@ -6,7 +6,7 @@
 /*   By: tcohen <tcohen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 20:12:07 by tcohen            #+#    #+#             */
-/*   Updated: 2024/10/24 18:03:41 by tcohen           ###   ########.fr       */
+/*   Updated: 2024/10/24 19:17:50 by tcohen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,8 @@ static void	sig_handler(int sig)
 
 void	check_if_sig(void)
 {
-	if (in_heredoc(0) == 0 && g_signal == 128 + SIGINT)
+//	if (in_heredoc(0) == 0 && g_signal == 128 + SIGINT)
+	if (g_signal == 128 + SIGINT)
 	{
 		// rl_replace_line("", 0);
 		rl_done = 1;
@@ -79,7 +80,7 @@ static void heredoc_sig_handler(int sig)
 	// {
 	// 	rl_replace_line("", 0);
 	rl_done = 1;
-	in_heredoc(-1);
+	//in_heredoc(-1);
 	// 	write(2, "\n", 1);
 	// 	rl_on_new_line();
 	// 	// printf("\n");

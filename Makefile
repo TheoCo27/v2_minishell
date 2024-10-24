@@ -6,7 +6,7 @@
 #    By: tcohen <tcohen@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/02 02:26:37 by theog             #+#    #+#              #
-#    Updated: 2024/10/22 22:34:29 by tcohen           ###   ########.fr        #
+#    Updated: 2024/10/24 19:34:20 by tcohen           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,7 +44,7 @@ PARSING_FILES = TO_BIN_main_test.c TO_BIN_print_functions.c pft_join_all.c \
                 make_token_and_append_helpers.c parsing_main.c parsing_main_helpers.c \
                 replace_vars.c pft_itoa.c pft_strdup.c pft_strjoin.c pft_substr.c \
                 split_array_tokens.c replace_vars_helpers.c parsing_main2.c \
-                parsing_main3.c
+                parsing_main3.c gc_shallow_clear2.c
 
 BUILTINS_FILES = detect_and_launch.c ft_cd.c ft_echo.c ft_env.c ft_exit.c \
                  ft_export.c ft_export_helpers.c ft_pwd.c ft_unset.c
