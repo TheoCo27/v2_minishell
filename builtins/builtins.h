@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vispinos <vispinos@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tcohen <tcohen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 17:57:29 by vispinos          #+#    #+#             */
-/*   Updated: 2024/10/16 18:24:16 by vispinos         ###   ########.fr       */
+/*   Updated: 2024/10/24 15:45:59 by tcohen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int		ft_pwd(t_state *s);
 
 /* detect_and_launch.c */
 int		launch_if_builtin(char **array, t_state *s);
-
+int	detect_builtin(char *cmd);
 /* ft_cd.c */
 int		ft_cd(char **array, t_state *s);
 char	*ft_join_key_value(char *str1, char *str2, t_state *s);

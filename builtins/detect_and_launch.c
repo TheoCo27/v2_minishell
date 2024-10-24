@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   detect_and_launch.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vispinos <vispinos@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tcohen <tcohen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:18:05 by vispinos          #+#    #+#             */
-/*   Updated: 2024/10/10 11:49:39 by vispinos         ###   ########.fr       */
+/*   Updated: 2024/10/24 15:46:05 by tcohen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-static int	detect_builtin(char *cmd)
+int	detect_builtin(char *cmd)
 {
 	if (ft_strncmp(cmd, "cd", ft_strlen(cmd) + 1) == 0)
 		return (CD);

@@ -6,7 +6,7 @@
 /*   By: tcohen <tcohen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 20:12:07 by tcohen            #+#    #+#             */
-/*   Updated: 2024/10/21 21:20:50 by tcohen           ###   ########.fr       */
+/*   Updated: 2024/10/24 18:03:41 by tcohen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ static void heredoc_sig_handler(int sig)
 	// {
 	// 	rl_replace_line("", 0);
 	rl_done = 1;
+	in_heredoc(-1);
 	// 	write(2, "\n", 1);
 	// 	rl_on_new_line();
 	// 	// printf("\n");

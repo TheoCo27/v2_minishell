@@ -6,7 +6,7 @@
 /*   By: tcohen <tcohen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 16:02:22 by tcohen            #+#    #+#             */
-/*   Updated: 2024/10/22 23:43:54 by tcohen           ###   ########.fr       */
+/*   Updated: 2024/10/24 19:11:22 by tcohen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int		ft_close_remaining_pipes(t_info_exec *cmd, t_info_exec **lst)
 	last = ft_pipelst_last(*lst);
 	if (cmd == *lst)
 		close(cmd->pipe_fd[1]);
-	if (cmd == last)
+	else if (cmd == last)
 		close(cmd->prev->pipe_fd[0]);
 	else
 	{
@@ -80,12 +80,14 @@ int	ft_exec_child(t_info_exec *cmd, t_info_exec **lst, char **env, int status)
 	//cmd->in_out_fd = ft_open(argv[1], 'r', cmd);
     ft_close_wrongpipes(cmd, lst);
     if (status != 0)
-	    if (ft_dup2(cmd->prev->pipe_fd[0], 0) == -1)
+	    if (cmd->arg[0] != NULL && ft_dup2(cmd->prev->pipe_fd[0], 0) == -1)
 		    return (ft_close_remaining_pipes(cmd, lst), garbage_destroy(), 1);
     if (status != 1)
-	    if (ft_dup2(cmd->pipe_fd[1], 1) == -1)
+	    if (cmd->arg[0] != NULL && ft_dup2(cmd->pipe_fd[1], 1) == -1)
 		    return (ft_close_remaining_pipes(cmd, lst), garbage_destroy(), 1);
 	ft_redir_all(cmd, lst);
+	if (cmd->arg[0] == NULL)
+		return (garbage_destroy(), 0);
 	if (launch_if_builtin(cmd->arg, cmd->state) == 1)
 	{
 		status = cmd->state->exit_code;

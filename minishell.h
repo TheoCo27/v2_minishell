@@ -6,7 +6,7 @@
 /*   By: tcohen <tcohen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 19:02:09 by tcohen            #+#    #+#             */
-/*   Updated: 2024/10/21 20:30:09 by tcohen           ###   ########.fr       */
+/*   Updated: 2024/10/24 17:17:25 by tcohen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,7 @@ typedef struct s_token
 
 int		ft_make_exec(t_token ***cmd_array, t_state *state);
 int		launch_if_builtin(char **array, t_state *s);
+int	detect_builtin(char *cmd);
+void	destroy_gc(t_list *gc);
+
 #endif

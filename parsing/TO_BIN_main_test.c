@@ -6,7 +6,7 @@
 /*   By: tcohen <tcohen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 18:28:07 by tcohen            #+#    #+#             */
-/*   Updated: 2024/10/23 00:03:02 by tcohen           ###   ########.fr       */
+/*   Updated: 2024/10/24 18:05:40 by tcohen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ int	minishell(t_state *state, t_token ***array)
 	array = parseline(state, line);
 	if (array)
 	{
-		//print_main_array(array);
 		set_parent_exec_sig();
 		if (ft_make_exec(array, state) == EXIT_FAILURE)
 			return (0);

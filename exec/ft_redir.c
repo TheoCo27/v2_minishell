@@ -6,7 +6,7 @@
 /*   By: tcohen <tcohen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 16:30:55 by tcohen            #+#    #+#             */
-/*   Updated: 2024/10/23 18:58:34 by tcohen           ###   ########.fr       */
+/*   Updated: 2024/10/24 16:53:00 by tcohen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ static int ft_heredoc(t_info_exec *cmd, t_file_lst *file, t_info_exec **lst)
 {
 	if (file->type == 'h')
 	{
+		if (cmd->arg[0] == NULL)
+			return (0);
 		heredoc_tab_tofd(file, cmd, lst);
 		cmd->in_fd = ft_open(file->name, 'r', cmd, lst);
 		if (ft_dup2(cmd->in_fd, 0) == -1)
