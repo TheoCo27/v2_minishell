@@ -1,0 +1,15 @@
+builtins
+builtins_obj
+exec
+exec_obj
+libft
+Makefile
+minishell
+minishell.h
+out
+parsing
+parsing_obj
+readline.supp
+run.sh
+signal
+signal_obj

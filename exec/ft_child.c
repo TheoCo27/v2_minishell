@@ -6,7 +6,7 @@
 /*   By: tcohen <tcohen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 16:02:22 by tcohen            #+#    #+#             */
-/*   Updated: 2024/10/24 19:28:26 by tcohen           ###   ########.fr       */
+/*   Updated: 2024/10/25 15:21:11 by tcohen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,11 +87,18 @@ int	ft_exec_child(t_info_exec *cmd, t_info_exec **lst, char **env, int status)
 		    return (ft_close_remaining_pipes(cmd, lst), garbage_destroy(), 1);
 	ft_redir_all(cmd, lst);
 	if (cmd->arg[0] == NULL)
-		return (garbage_destroy(), 0);
+	{
+		ft_close_remaining_pipes(cmd, lst);
+		destroy_gc(cmd->state->gc);
+		garbage_destroy();
+		exit (0);
+	}
 	if (launch_if_builtin(cmd->arg, cmd->state) == 1)
 	{
 		status = cmd->state->exit_code;
-		return(garbage_destroy(), status);
+		destroy_gc(cmd->state->gc);
+		garbage_destroy();
+		exit (status);
 	}
 	if (ft_path(env, cmd) == 1)
 		return (ft_close_remaining_pipes(cmd, lst), garbage_destroy(), 1);
